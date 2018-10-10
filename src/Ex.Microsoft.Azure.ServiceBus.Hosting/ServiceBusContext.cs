@@ -25,6 +25,15 @@ namespace Microsoft.Azure.ServiceBus.Hosting
             return this;
         }
 
+        public DynamicMessageHandlerContext DynamicMessageHandler(Func<Message, object> messageDeserializer)
+        {
+            Services.Configure<DynamicMessageHandlerOptions>(options =>
+            {
+                options.MessageDeserializer = messageDeserializer; 
+            });
+            return new DynamicMessageHandlerContext(Services);
+        }
+
         public StaticMessageHandlerContext StaticMessageHandler() =>
             new StaticMessageHandlerContext(Services);
     }
