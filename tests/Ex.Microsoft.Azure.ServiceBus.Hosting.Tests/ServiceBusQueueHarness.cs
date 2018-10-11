@@ -7,21 +7,29 @@ namespace Microsoft.Azure.ServiceBus.Hosting.Tests
 {
     public static class ServiceBusQueueHarness
     {
-        public static ServiceBusQueueHarness<ThrowingMessageHandler> Throwing() =>
-            new ServiceBusQueueHarness<ThrowingMessageHandler>(new ThrowingMessageHandler());
+        public static ServiceBusQueueHarness<ThrowingMessageHandler> Throwing(int countdown) =>
+            new ServiceBusQueueHarness<ThrowingMessageHandler>(
+                new ThrowingMessageHandler(),
+                new MemoryExceptionHandler(countdown)
+            );
 
         public static ServiceBusQueueHarness<MemoryMessageHandler> InMemory(int countdown) =>
-            new ServiceBusQueueHarness<MemoryMessageHandler>(new MemoryMessageHandler(countdown));
+            new ServiceBusQueueHarness<MemoryMessageHandler>(
+                new MemoryMessageHandler(countdown),
+                new MemoryExceptionHandler(0)
+            );
     }
 
     public class ServiceBusQueueHarness<T>
         where T : IMessageHandler
     {
         readonly T _messageHandler;
-        readonly MemoryExceptionHandler _exceptionHandler =
-            new MemoryExceptionHandler();
-        public ServiceBusQueueHarness(T messageHandler) =>
+        readonly MemoryExceptionHandler _exceptionHandler;
+        public ServiceBusQueueHarness(T messageHandler, MemoryExceptionHandler exceptionHandler)
+        {
             _messageHandler = messageHandler;
+            _exceptionHandler = exceptionHandler;
+        }
 
         readonly static string _connectionString;
         static ServiceBusQueueHarness()

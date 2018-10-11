@@ -11,7 +11,7 @@ namespace Microsoft.Azure.ServiceBus.Hosting.Tests
         [Fact]
         public async Task ExceptionHandler_ShouldHandleExceptions()
         {
-            var harness = ServiceBusQueueHarness.Throwing();
+            var harness = ServiceBusQueueHarness.Throwing(3);
 
             await harness.RunAsync(AssertAsync);
 

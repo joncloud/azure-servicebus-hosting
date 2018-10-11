@@ -8,8 +8,10 @@ namespace Microsoft.Azure.ServiceBus.Hosting.Tests
 {
     public class MemoryExceptionHandler : IExceptionHandler
     {
-        readonly ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
-        public WaitHandle Handled => _manualResetEvent;
+        readonly CountdownEvent _countdownEvent;
+        public WaitHandle Handled => _countdownEvent.WaitHandle;
+        public MemoryExceptionHandler(int countdown) =>
+            _countdownEvent = new CountdownEvent(countdown);
 
         readonly ConcurrentBag<ExceptionReceivedEventArgs> _eventArgs =
             new ConcurrentBag<ExceptionReceivedEventArgs>();
@@ -20,7 +22,7 @@ namespace Microsoft.Azure.ServiceBus.Hosting.Tests
         public Task HandleExceptionAsync(ExceptionReceivedEventArgs eventArgs)
         {
             _eventArgs.Add(eventArgs);
-            _manualResetEvent.Set();
+            _countdownEvent.Signal();
             return Task.CompletedTask;
         }
     }
