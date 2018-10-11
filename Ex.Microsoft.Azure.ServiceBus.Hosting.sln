@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{08212186-BCC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ex.Microsoft.Azure.ServiceBus.Hosting", "src\Ex.Microsoft.Azure.ServiceBus.Hosting\Ex.Microsoft.Azure.ServiceBus.Hosting.csproj", "{CDEF0076-D29E-4E0E-ACCB-E911B2E0C6C8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2F7B5A06-0A20-470F-9337-E4A7259D34CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex.Microsoft.Azure.ServiceBus.Hosting.Tests", "tests\Ex.Microsoft.Azure.ServiceBus.Hosting.Tests\Ex.Microsoft.Azure.ServiceBus.Hosting.Tests.csproj", "{983513B6-2C71-412D-91A2-F50A71F4FA3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +21,17 @@ Global
 		{CDEF0076-D29E-4E0E-ACCB-E911B2E0C6C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDEF0076-D29E-4E0E-ACCB-E911B2E0C6C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDEF0076-D29E-4E0E-ACCB-E911B2E0C6C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{983513B6-2C71-412D-91A2-F50A71F4FA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{983513B6-2C71-412D-91A2-F50A71F4FA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{983513B6-2C71-412D-91A2-F50A71F4FA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{983513B6-2C71-412D-91A2-F50A71F4FA3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CDEF0076-D29E-4E0E-ACCB-E911B2E0C6C8} = {08212186-BCC6-4FE6-AD21-26782663A5EA}
+		{983513B6-2C71-412D-91A2-F50A71F4FA3E} = {2F7B5A06-0A20-470F-9337-E4A7259D34CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DF7AB6A8-4AA3-4824-B221-0EE2F4498427}
