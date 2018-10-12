@@ -91,3 +91,45 @@ public static class Program {
     .RunConsoleAsync();
 }
 ```
+
+### Handling messages generically
+You can also handle messages using `IMessageHandler<T>`, which creates a contract with a generic type.
+
+```csharp
+public class MyInt32Handler : IMessageHandler<int> {
+  public Task HandleAsync(int message, CancellationToken cancellationToken) =>
+    throw new NotImplementedException();
+}
+
+public class MyStringHandler : IMessageHandler<string> {
+  public Task HandleAsync(string message, CancellationToken cancellationToken) =>
+    throw new NotImplementedException();
+}
+
+public static class Program {
+  static string GetConnectionString(IConfiguration configuration) =>
+    configuration.GetSection("ConnectionStrings")["ServiceBusConnection"];
+
+  public static Task Main(string[] args) =>
+    new HostBuilder().ConfigureServiceBusQueue(
+      (hostBuilder, options) =>
+        options.ConnectionString = GetConnectionString(hostBuilder.Configuration),
+      context => context.ExceptionHandler<MyExceptionHandler>()
+        .GenericMessageHandler(msg =>
+        {
+          switch (msg.ContentType)
+          {
+            case "int":
+              return BitConverter.ToInt32(msg.Body, 0);
+            case "string":
+              return Encoding.UTF8.GetString(msg.Body);
+            default:
+              throw new Exception("Invalid message content type");
+          }
+        })
+        .Scoped<int, MyInt32Handler>()
+        .Scoped<string, MyStringHandler>()
+    )
+    .RunConsoleAsync();
+}
+```

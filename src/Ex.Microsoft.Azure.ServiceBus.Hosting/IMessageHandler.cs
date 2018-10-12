@@ -7,4 +7,9 @@ namespace Microsoft.Azure.ServiceBus.Hosting
     {
         Task HandleAsync(Message message, CancellationToken cancellationToken);
     }
+
+    public interface IMessageHandler<T>
+    {
+        Task HandleAsync(T message, CancellationToken cancellationToken);
+    }
 }
