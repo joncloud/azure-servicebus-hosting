@@ -5,9 +5,30 @@
     <RootNamespace>Microsoft.Azure.ServiceBus.Hosting</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix>local</VersionSuffix>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Version="3.1.1" Include="Microsoft.Azure.ServiceBus" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.1.1" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <Description>Azure Service Bus hosting infrastructure and startup logic for background applications.</Description>
+    <Copyright>Copyright (c) 2018 joncloud (jdberube@gmail.com)</Copyright>
+    <AssemblyTitle>Ex.Microsoft.Azure.ServiceBus.Hosting</AssemblyTitle>
+    <Authors>joncloud</Authors>
+    <AssemblyName>Ex.Microsoft.Azure.ServiceBus.Hosting</AssemblyName>
+    <PackageId>Ex.Microsoft.Azure.ServiceBus.Hosting</PackageId>
+    <PackageTags>Azure;Service;Bus;ServiceBus;.NET;AMQP;IoT;Queue;Topic;Hosting</PackageTags>
+    <PackageReleaseNotes>https://github.com/joncloud/azure-servicebus-hosting/releases</PackageReleaseNotes>
+    <PackageIconUrl>https://raw.githubusercontent.com/joncloud/azure-servicebus-hosting/master/nuget.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/joncloud/azure-servicebus-hosting</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/joncloud/azure-servicebus-hosting/master/LICENSE.md</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/joncloud/azure-servicebus-hosting</RepositoryUrl>
+  </PropertyGroup>
 
 </Project>
