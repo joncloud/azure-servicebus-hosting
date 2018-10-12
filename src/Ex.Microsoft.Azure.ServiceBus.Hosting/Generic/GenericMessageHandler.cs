@@ -23,8 +23,7 @@ namespace Microsoft.Azure.ServiceBus.Hosting.Generic
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
-
-
+        
         readonly ConcurrentDictionary<Type, Func<object, CancellationToken, Task>> _handlers =
             new ConcurrentDictionary<Type, Func<object, CancellationToken, Task>>();
         public async Task HandleTypedMessageAsync<T>(T message, CancellationToken cancellationToken)
@@ -36,37 +35,47 @@ namespace Microsoft.Azure.ServiceBus.Hosting.Generic
             }
         }
 
+        Func<object, CancellationToken, Task> CompileHandlerDelegate(Type type)
+        {
+            // Compile to call:
+            // (rawMessage, token) => HandleTypedMessageAsync<{type}>(({type})rawMessage, token)
+            var param = Expression.Parameter(typeof(object), "msg");
+            var param2 = Expression.Parameter(typeof(CancellationToken), "cancellationToken");
+            var cast = Expression.Convert(param, type);
+            var self = Expression.Constant(this, typeof(GenericMessageHandler));
+            var method = typeof(GenericMessageHandler).GetMethod(nameof(HandleTypedMessageAsync))
+                .MakeGenericMethod(type);
+            var call = Expression.Call(self, method, cast, param2);
+            return Expression.Lambda<Func<object, CancellationToken, Task>>(call, param, param2)
+                .Compile();
+        }
+
         public async Task HandleAsync(Message message, CancellationToken cancellationToken)
         {
             var deserializedMessage = _options.MessageDeserializer(message);
             if (deserializedMessage == null)
             {
-                // TODO handle
+                throw new NullMessageContentException(message.MessageId);
             }
             var messageType = deserializedMessage.GetType();
 
             // TODO calculate using ticks ala asp.net core
             var watch = Stopwatch.StartNew();
 
-            var handler = _handlers.GetOrAdd(messageType,
-                key =>
-                {
-                    // Compile to call (rawMessage, token) => HandleTypedMessageAsync<{type}>(({type})rawMessage, token)
-                    var param = Expression.Parameter(typeof(object), "msg");
-                    var param2 = Expression.Parameter(typeof(CancellationToken), "cancellationToken");
-                    var cast = Expression.Convert(param, key);
-                    var self = Expression.Constant(this, typeof(GenericMessageHandler));
-                    var method = typeof(GenericMessageHandler).GetMethod(nameof(HandleTypedMessageAsync))
-                        .MakeGenericMethod(key);
-                    var call = Expression.Call(self, method, cast, param2);
-                    return Expression.Lambda<Func<object, CancellationToken, Task>>(call, param, param2)
-                        .Compile();
-                });
+            var handler = _handlers.GetOrAdd(
+                messageType,
+                CompileHandlerDelegate
+            );
 
             await handler(deserializedMessage, cancellationToken);
 
             watch.Stop();
-            _logger.LogInformation("Handled message type {messageType} in {elapsed}", messageType, watch.Elapsed);
+            _logger.LogInformation(
+                "Handled message {messageId} type {messageType} in {elapsed}",
+                message.MessageId, 
+                messageType, 
+                watch.Elapsed
+            );
         }
     }
 }
