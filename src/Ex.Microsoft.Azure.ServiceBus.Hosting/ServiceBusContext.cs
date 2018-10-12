@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.ServiceBus.Hosting.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Microsoft.Azure.ServiceBus.Hosting
@@ -25,13 +26,13 @@ namespace Microsoft.Azure.ServiceBus.Hosting
             return this;
         }
 
-        public DynamicMessageHandlerContext DynamicMessageHandler(Func<Message, object> messageDeserializer)
+        public GenericMessageHandlerContext DynamicMessageHandler(Func<Message, object> messageDeserializer)
         {
-            Services.Configure<DynamicMessageHandlerOptions>(options =>
+            Services.Configure<GenericMessageHandlerOptions>(options =>
             {
                 options.MessageDeserializer = messageDeserializer; 
             });
-            return new DynamicMessageHandlerContext(Services);
+            return new GenericMessageHandlerContext(Services);
         }
 
         public StaticMessageHandlerContext StaticMessageHandler() =>

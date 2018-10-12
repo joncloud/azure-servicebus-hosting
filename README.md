@@ -92,16 +92,18 @@ public static class Program {
 }
 ```
 
-### Handling messages dynamically
-You can also handle messages using `IMessageHandler<T>`, which creates a contract with a static type.
+### Handling messages generically
+You can also handle messages using `IMessageHandler<T>`, which creates a contract with a generic type.
 
 ```csharp
 public class MyInt32Handler : IMessageHandler<int> {
-  public Task HandleAsync(int message, CancellationToken cancellationToken) => throw new NotImplementedException();
+  public Task HandleAsync(int message, CancellationToken cancellationToken) =>
+    throw new NotImplementedException();
 }
 
 public class MyStringHandler : IMessageHandler<string> {
-  public Task HandleAsync(string message, CancellationToken cancellationToken) => throw new NotImplementedException();
+  public Task HandleAsync(string message, CancellationToken cancellationToken) =>
+    throw new NotImplementedException();
 }
 
 public static class Program {
@@ -113,7 +115,7 @@ public static class Program {
       (hostBuilder, options) =>
         options.ConnectionString = GetConnectionString(hostBuilder.Configuration),
       context => context.ExceptionHandler<MyExceptionHandler>()
-        .DynamicMessageHandler(msg =>
+        .GenericMessageHandler(msg =>
         {
           switch (msg.ContentType)
           {
