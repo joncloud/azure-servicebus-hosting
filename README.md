@@ -39,7 +39,7 @@ public class MyExceptionHandler : IExceptionHandler {
 }
 ```
 
-### Conecting to a Service Bus Queue
+### Connecting to a Service Bus Queue
 Use the `ConfigureServiceBusQueue` extension method to connect to a Service Bus Queue.
 
 ```csharp
@@ -64,8 +64,8 @@ public static class Program {
 }
 ```
 
-### Conecting to a Service Bus Subscription
-Use the `ConfigureServiceBusQueue` extension method to connect to a Service Bus Subscription.
+### Connecting to a Service Bus Subscription
+Use the `ConfigureServiceBusSubscription` extension method to connect to a Service Bus Subscription.
 
 ```csharp
 using Microsoft.Azure.ServiceBus.Hosting;
