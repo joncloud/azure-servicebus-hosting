@@ -50,6 +50,8 @@ namespace Microsoft.Azure.ServiceBus.Hosting.Generic
                 .Compile();
         }
 
+        private static readonly double TimestampToTicks = TimeSpan.TicksPerSecond / (double)Stopwatch.Frequency;
+
         public async Task HandleAsync(Message message, CancellationToken cancellationToken)
         {
             var deserializedMessage = _options.MessageDeserializer(message);
@@ -59,23 +61,28 @@ namespace Microsoft.Azure.ServiceBus.Hosting.Generic
             }
             var messageType = deserializedMessage.GetType();
 
-            // TODO calculate using ticks ala asp.net core
-            var watch = Stopwatch.StartNew();
+            var start = Stopwatch.GetTimestamp();
 
             var handler = _handlers.GetOrAdd(
                 messageType,
                 CompileHandlerDelegate
             );
 
-            await handler(deserializedMessage, cancellationToken);
+            try
+            {
+                await handler(deserializedMessage, cancellationToken);
+            }
+            finally
+            {
+                var stop = Stopwatch.GetTimestamp();
 
-            watch.Stop();
-            _logger.LogInformation(
-                "Handled message {messageId} type {messageType} in {elapsed}",
-                message.MessageId, 
-                messageType, 
-                watch.Elapsed
-            );
+                _logger.LogInformation(
+                    "Handled message {messageId} type {messageType} in {messageDuration}ms",
+                    message.MessageId,
+                    messageType,
+                    new TimeSpan((long)(TimestampToTicks * (stop - start))).TotalMilliseconds
+                );
+            }
         }
     }
 }
