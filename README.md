@@ -1,4 +1,5 @@
 # Ex.Microsoft.Azure.ServiceBus.Hosting
+[![NuGet](https://img.shields.io/nuget/v/Ex.Microsoft.Azure.ServiceBus.Hosting.svg)](https://www.nuget.org/packages/Ex.Microsoft.Azure.ServiceBus.Hosting/)
 
 ## Description
 Ex.Microsoft.Azure.ServiceBus.Hosting implements the ability to host an application process messages from an Azure Service Bus Queue or Subscription.
